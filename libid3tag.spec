@@ -1,7 +1,7 @@
 Summary:	Library for reading and writing ID3 tags
 Name:		libid3tag
 Version:	0.15.1b
-Release:	13
+Release:	14
 License:	GPL
 Group:		Libraries
 Source0:	ftp://ftp.mars.org/pub/mpeg/%{name}-%{version}.tar.gz
@@ -22,6 +22,7 @@ both ID3v1 and the various versions of ID3v2.
 Summary:	Header files for libid3tag
 Group:		Development/Libraries
 Requires:	%{name} = %{version}-%{release}
+Requires:	zlib-devel
 
 %description devel
 Header files for libid3tag.
@@ -30,7 +31,6 @@ Header files for libid3tag.
 %setup -q
 %patch0 -p1
 
-# Create an additional pkgconfig file
 %{__cat} > id3tag.pc << EOF
 prefix=%{_prefix}
 exec_prefix=%{_prefix}
@@ -64,6 +64,8 @@ rm -rf $RPM_BUILD_ROOT
 install -d $RPM_BUILD_ROOT%{_pkgconfigdir}
 install id3tag.pc $RPM_BUILD_ROOT%{_pkgconfigdir}
 
+%{__rm} $RPM_BUILD_ROOT%{_libdir}/*.la
+
 %clean
 rm -rf $RPM_BUILD_ROOT
 
@@ -79,6 +81,5 @@ rm -rf $RPM_BUILD_ROOT
 %files devel
 %defattr(644,root,root,755)
 %attr(755,root,root) %{_libdir}/lib*.so
-%{_libdir}/lib*.la
 %{_includedir}/*.h
 %{_pkgconfigdir}/id3tag.pc
